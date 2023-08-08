@@ -1,6 +1,8 @@
+import path from 'path'
+
 import c from 'ansi-colors'
 
-import { getConfig } from '@redwoodjs/project-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import createFastifyInstance from './fastify'
 import withApiProxy from './plugins/withApiProxy'
@@ -33,6 +35,12 @@ export const apiCliOptions = {
     desc: 'Root path where your api functions are served',
     coerce: coerceRootPath,
   },
+  loadEnvFiles: {
+    description: 'Load .env and .env.defaults files',
+    type: 'boolean',
+    // We have to default to `false` for backwards compatibility.
+    default: false,
+  },
 } as const
 
 export const webCliOptions = {
@@ -46,9 +54,20 @@ export const webCliOptions = {
 } as const
 
 export const apiServerHandler = async (options: ApiServerArgs) => {
-  const { port, socket, apiRootPath } = options
+  const { port, socket, apiRootPath, loadEnvFiles } = options
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
+
+  if (loadEnvFiles) {
+    const { config } = await import('dotenv-defaults')
+
+    config({
+      path: path.join(getPaths().base, '.env'),
+      defaults: path.join(getPaths().base, '.env.defaults'),
+      // @ts-expect-error types are just wrong
+      multiline: true,
+    })
+  }
 
   let fastify = createFastifyInstance()
 

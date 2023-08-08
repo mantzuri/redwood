@@ -8,7 +8,7 @@ import path from 'path'
 import c from 'ansi-colors'
 import chalk from 'chalk'
 import chokidar from 'chokidar'
-import dotenv from 'dotenv'
+import { config } from 'dotenv-defaults'
 import { debounce } from 'lodash'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -39,7 +39,7 @@ const argv = yargs(hideBin(process.argv))
 
 const rwjsPaths = getPaths()
 
-dotenv.config({
+config({
   path: rwjsPaths.base,
 })
 

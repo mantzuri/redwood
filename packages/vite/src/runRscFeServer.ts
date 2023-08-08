@@ -7,7 +7,6 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import busboy from 'busboy'
-// @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
@@ -37,6 +36,7 @@ const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 loadDotEnv({
   path: path.join(getPaths().base, '.env'),
   defaults: path.join(getPaths().base, '.env.defaults'),
+  // @ts-expect-error types are just wrong
   multiline: true,
 })
 //------------------------------------------------

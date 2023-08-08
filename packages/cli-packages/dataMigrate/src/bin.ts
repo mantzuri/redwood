@@ -1,6 +1,5 @@
 import path from 'path'
 
-// @ts-expect-error not sure; other packages use this and don't provide the types
 import { config } from 'dotenv-defaults'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -13,6 +12,7 @@ import { handler } from './commands/upHandler'
 config({
   path: path.join(getPaths().base, '.env'),
   defaults: path.join(getPaths().base, '.env.defaults'),
+  // @ts-expect-error types are just wrong
   multiline: true,
 })
 
